@@ -119,14 +119,14 @@
       .file-btn {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        height: 32px;
-        padding: 0 12px;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        padding: 0;
         border: 1px solid transparent;
         border-radius: 4px;
         background: transparent;
         color: #252423;
-        font-size: 13px;
         cursor: pointer;
         transition: all 0.15s ease;
       }
@@ -151,7 +151,8 @@
       }
 
       .file-btn i {
-        font-size: 16px;
+        font-size: 18px;
+        line-height: 1;
       }
 
       .file-separator {
@@ -437,35 +438,28 @@
       <!-- 文件操作工具栏（在 Ribbon 下方） -->
       <div class="file-toolbar">
         <div class="file-actions">
-          <button id="new-doc" class="file-btn" title="新建文档">
+          <button id="new-doc" class="file-btn" title="新建文档 (Ctrl+N)">
             <i class="ri-file-add-line"></i>
-            <span>新建</span>
           </button>
-          <button id="open-json" class="file-btn" title="打开 JSON 文档">
+          <button id="open-json" class="file-btn" title="打开 JSON 文档 (Ctrl+O)">
             <i class="ri-folder-open-line"></i>
-            <span>打开</span>
           </button>
-          <button id="save-json" class="file-btn" title="保存为 JSON">
+          <button id="save-json" class="file-btn" title="保存为 JSON (Ctrl+S)">
             <i class="ri-save-line"></i>
-            <span>保存</span>
           </button>
           <div class="file-separator"></div>
           <button id="export-docx" class="file-btn primary" title="导出为 DOCX">
             <i class="ri-file-word-line"></i>
-            <span>导出 DOCX</span>
           </button>
           <button id="export-pdf" class="file-btn" title="导出为 PDF（开发中）">
             <i class="ri-file-pdf-line"></i>
-            <span>导出 PDF</span>
           </button>
           <div class="file-separator"></div>
-          <button id="print-doc" class="file-btn" title="打印文档">
+          <button id="print-doc" class="file-btn" title="打印文档 (Ctrl+P)">
             <i class="ri-printer-line"></i>
-            <span>打印</span>
           </button>
           <button id="reset-demo" class="file-btn" title="重置示例">
             <i class="ri-refresh-line"></i>
-            <span>重置</span>
           </button>
         </div>
         <div class="file-info">
@@ -843,6 +837,14 @@
         updateWordCount(doc)
         setFileStatus('示例已重置')
       })
+
+      // JSON 面板折叠/展开
+      const collapseBtn = document.querySelector('#collapse-json')
+      if (collapseBtn) {
+        collapseBtn.addEventListener('click', () => {
+          appEl.classList.toggle('json-collapsed')
+        })
+      }
 
       // 监听超链接插入事件（由 RibbonToolbar 触发）
       window.addEventListener('insert-hyperlink', (evt: Event) => {
