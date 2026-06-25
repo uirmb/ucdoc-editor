@@ -1,0 +1,180 @@
+/**
+ * Word 风格 Ribbon 工具栏样式
+ */
+
+.ce-ribbon-toolbar {
+  width: 100%;
+  height: auto;
+  background: #f3f2f1;
+  border-bottom: 1px solid #e1dfdd;
+  box-sizing: border-box;
+}
+
+.ce-ribbon-tabs {
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 8px 0;
+  gap: 4px;
+}
+
+.ce-ribbon-tab {
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #252423;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.ce-ribbon-tab:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.ce-ribbon-tab.active {
+  background-color: #ffffff;
+  font-weight: 500;
+  box-shadow: 0 -1px 0 #e1dfdd inset;
+}
+
+.ce-ribbon-content {
+  background: #ffffff;
+  min-height: 100px;
+  padding: 8px;
+  border-top: 1px solid transparent;
+}
+
+.ce-ribbon-tab.active + .ce-ribbon-content {
+  border-top-color: #e1dfdd;
+}
+
+.ce-ribbon-groups {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.ce-ribbon-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+  border-right: 1px solid #e1dfdd;
+  gap: 4px;
+}
+
+.ce-ribbon-group:last-child {
+  border-right: none;
+}
+
+.ce-ribbon-group-label {
+  font-size: 11px;
+  color: #605e5c;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.ce-ribbon-items {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ce-ribbon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 50px;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.ce-ribbon-item:hover {
+  background-color: #f0f0f0;
+}
+
+.ce-ribbon-item:active {
+  background-color: #e1dfdd;
+}
+
+.ce-ribbon-item.active {
+  background-color: #e1dfdd;
+  box-shadow: inset 0 0 0 1px #d1d0ce;
+}
+
+.ce-ribbon-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ce-ribbon-item i {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.ce-ribbon-item-label {
+  font-size: 11px;
+  color: #252423;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Dropdown 类型 */
+.ce-ribbon-item--dropdown {
+  min-width: 48px;
+}
+
+.ce-ribbon-item--dropdown::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #605e5c;
+}
+
+/* Colorpicker 类型 */
+.ce-ribbon-item--colorpicker {
+  position: relative;
+}
+
+.ce-ribbon-item--colorpicker .color-preview {
+  width: 16px;
+  height: 4px;
+  margin-top: 2px;
+  border-radius: 1px;
+}
+
+/* Toggle 类型 */
+.ce-ribbon-item--toggle.active {
+  background-color: #d1d0ce;
+}
+
+/* Panel 类型（如表格选择器） */
+.ce-ribbon-item--panel {
+  min-width: 64px;
+  min-height: 64px;
+}
+
+/* Separator */
+.ce-ribbon-separator {
+  width: 1px;
+  background-color: #e1dfdd;
+  margin: 0 4px;
+  align-self: stretch;
+}
