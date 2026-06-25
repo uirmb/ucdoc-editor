@@ -1,9 +1,1 @@
-.idea
-node_modules
-.DS_Store
-dist
-dist-ssr
-*.local
-cache
-.temp
-coverage
+Nothing needs to be added to the .gitignore file since the only change is a modification to an HTML file, which is a source file and should not be ignored.

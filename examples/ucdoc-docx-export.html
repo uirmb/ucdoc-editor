@@ -99,6 +99,79 @@
         font-size: 12px;
       }
 
+      /* ========== 文件工具栏（Word 风格快速访问） ========== */
+      .file-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 44px;
+        padding: 0 16px;
+        background: #f3f2f1;
+        border-bottom: 1px solid #e1dfdd;
+      }
+
+      .file-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .file-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 32px;
+        padding: 0 12px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background: transparent;
+        color: #252423;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .file-btn:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        border-color: #d1d0ce;
+      }
+
+      .file-btn:active {
+        background-color: #e1dfdd;
+      }
+
+      .file-btn.primary {
+        background: #1d4ed8;
+        color: #ffffff;
+        border-color: #1d4ed8;
+      }
+
+      .file-btn.primary:hover {
+        background: #2563eb;
+      }
+
+      .file-btn i {
+        font-size: 16px;
+      }
+
+      .file-separator {
+        width: 1px;
+        height: 24px;
+        margin: 0 8px;
+        background: #e1dfdd;
+      }
+
+      .file-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .file-status {
+        color: #605e5c;
+        font-size: 12px;
+      }
+
       .workbench {
         display: grid;
         grid-template-columns: 230px minmax(0, 1fr) 380px;
@@ -360,6 +433,45 @@
 
       <!-- Word 风格 Ribbon 工具栏容器 -->
       <div id="ribbon-toolbar"></div>
+
+      <!-- 文件操作工具栏（在 Ribbon 下方） -->
+      <div class="file-toolbar">
+        <div class="file-actions">
+          <button id="new-doc" class="file-btn" title="新建文档">
+            <i class="ri-file-add-line"></i>
+            <span>新建</span>
+          </button>
+          <button id="open-json" class="file-btn" title="打开 JSON 文档">
+            <i class="ri-folder-open-line"></i>
+            <span>打开</span>
+          </button>
+          <button id="save-json" class="file-btn" title="保存为 JSON">
+            <i class="ri-save-line"></i>
+            <span>保存</span>
+          </button>
+          <div class="file-separator"></div>
+          <button id="export-docx" class="file-btn primary" title="导出为 DOCX">
+            <i class="ri-file-word-line"></i>
+            <span>导出 DOCX</span>
+          </button>
+          <button id="export-pdf" class="file-btn" title="导出为 PDF（开发中）">
+            <i class="ri-file-pdf-line"></i>
+            <span>导出 PDF</span>
+          </button>
+          <div class="file-separator"></div>
+          <button id="print-doc" class="file-btn" title="打印文档">
+            <i class="ri-printer-line"></i>
+            <span>打印</span>
+          </button>
+          <button id="reset-demo" class="file-btn" title="重置示例">
+            <i class="ri-refresh-line"></i>
+            <span>重置</span>
+          </button>
+        </div>
+        <div class="file-info">
+          <span class="file-status" id="file-status">就绪</span>
+        </div>
+      </div>
 
       <div class="workbench">
         <aside class="sidebar">
@@ -660,26 +772,68 @@
       jsonEl.value = JSON.stringify(initialDoc, null, 2)
       updateWordCount(initialDoc)
 
-      // 4. 绑定事件监听
+      // 文件状态更新函数
+      function setFileStatus(message: string) {
+        const statusEl = document.querySelector('#file-status')
+        if (statusEl) {
+          statusEl.textContent = message
+        }
+      }
+
+      // 4. 绑定事件监听 - 文件操作按钮
+      document.querySelector('#new-doc').addEventListener('click', () => {
+        const newDoc = createUcDocFile({
+          metadata: {
+            title: '未命名文档',
+            author: 'ucdoc-editor'
+          },
+          data: {
+            header: [],
+            main: [{ value: '' }],
+            footer: []
+          }
+        })
+        shell.openUcDoc(newDoc, { applyOptions: true })
+        jsonEl.value = JSON.stringify(newDoc, null, 2)
+        updateWordCount(newDoc)
+        setFileStatus('新建文档')
+      })
+
+      document.querySelector('#open-json').addEventListener('click', () => {
+        try {
+          const doc = JSON.parse(jsonEl.value)
+          shell.openUcDoc(doc, { applyOptions: true })
+          updateWordCount(doc)
+          setFileStatus('文档已打开')
+        } catch (err) {
+          alert('JSON 格式错误，请检查')
+          setFileStatus('打开失败')
+        }
+      })
+
       document.querySelector('#save-json').addEventListener('click', async () => {
         const doc = await shell.saveUcDoc({ metadata: { title: 'UcDoc DOCX Export Demo' } })
         jsonEl.value = JSON.stringify(doc, null, 2)
         updateWordCount(doc)
-        setStatus('UcDoc JSON saved')
-      })
-
-      document.querySelector('#open-json').addEventListener('click', () => {
-        const doc = JSON.parse(jsonEl.value)
-        shell.openUcDoc(doc, { applyOptions: true })
-        updateWordCount(doc)
-        setStatus('UcDoc JSON opened')
+        setFileStatus('文档已保存')
       })
 
       document.querySelector('#export-docx').addEventListener('click', () => {
         const doc = shell.getUcDoc({ metadata: { title: 'UcDoc DOCX Export Demo' } })
         const result = exportUcDocToDocx(doc, { fileName: 'ucdoc-docx-export-demo.docx' })
         downloadBlob(createDocxBlob(result), result.fileName)
-        setStatus('DOCX exported')
+        setFileStatus('DOCX 已导出')
+      })
+
+      document.querySelector('#export-pdf').addEventListener('click', () => {
+        // TODO: 实现 PDF 导出功能
+        alert('PDF 导出功能开发中...\n\n当前支持：\n- 使用浏览器打印功能（Ctrl+P）\n- 导出为 DOCX 后用 Word 转 PDF')
+        setFileStatus('PDF 导出：开发中')
+      })
+
+      document.querySelector('#print-doc').addEventListener('click', () => {
+        window.print()
+        setFileStatus('打印对话框已打开')
       })
 
       document.querySelector('#reset-demo').addEventListener('click', () => {
@@ -687,7 +841,7 @@
         shell.openUcDoc(doc, { applyOptions: true })
         jsonEl.value = JSON.stringify(doc, null, 2)
         updateWordCount(doc)
-        setStatus('Demo reset')
+        setFileStatus('示例已重置')
       })
 
       // 监听超链接插入事件（由 RibbonToolbar 触发）
