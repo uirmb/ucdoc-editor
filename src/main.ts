@@ -1,5 +1,6 @@
 import { commentList, data, options } from './mock'
 import './style.css'
+import '../ui/styles/ribbon.css'
 import prism from 'prismjs'
 import Editor, {
   BlockType,
@@ -26,6 +27,7 @@ import { Dialog } from './components/dialog/Dialog'
 import { formatPrismToken } from './utils/prism'
 import { Signature } from './components/signature/Signature'
 import { debounce, nextTick, scrollIntoView } from './utils'
+import { UIManager } from './ui'
 
 window.onload = function () {
   const isApple =
